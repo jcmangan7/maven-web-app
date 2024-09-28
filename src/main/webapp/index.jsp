@@ -28,7 +28,7 @@
 <hr>
 <hr>
 <p align=center> Africa ProCloud Institute - Consultant, Training and Software Development</p>
-<p align=center><small>Copyrights 2024 by <a href="https://solavisetech.com//">Africa ProCloud Institute</a> </small></p>
+<p align=center><small>Copyrights 2024 by <a href="https://africaprocloud.com//">Africa ProCloud Institute</a> </small></p>
 
 </body>
 </html>

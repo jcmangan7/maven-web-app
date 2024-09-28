@@ -16,7 +16,6 @@
 <div style="text-align: center;">
 	<span style="font-weight: bold;">
                 Africa ProCloud Institute LLC, 
-		Africa ProCloud Institute, LLC
         Office (612) 478-9350 Mobile:
         Email: africaprocloudinstitute@gmail.com
 		<br>

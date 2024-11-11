@@ -9,7 +9,7 @@
 <h1 align="center">Africa ProCloud Institute is developing and supporting quality Software Solutions to millions of clients globally.
 	           We are raising billionaires IT professionals accross the nations of the World.
 	Africa ProCloud Institute offers Training for AWS Cloud, DevOps with Linux, Docker and Kubernetes, equipping IT Engineers for best performance.
-        Africa ProCloud Institute, the Pride of Africa.
+        Africa ProCloud Institute, the Pride of Africa.thanks
         Our next batch will start in October 2024.
         Please invite all your contacts and friends for this life changing course.
 </h1>

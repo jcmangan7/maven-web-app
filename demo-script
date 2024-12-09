@@ -1,0 +1,209 @@
+develop applications
+build applications
+test applications
+review and qualify applications
+deploy applications
+secure applications
+monitor applications
+
+
+scripted jenkinsfile
+====================
+
+node {
+	stage('1.clone') {}
+	stage('2.Building') {}
+	stage('3.CodeQA') {}
+	stage('4.UploadArtifacts') {}
+	stage('5.Deploy2UAT') {}
+	stage('6.ManualAG') {}
+	stage('7.Deploy2Prod') {}
+	stage('8.Monitoring') {}
+	stage('9.EmailNotification') {}
+}
+=================================================================
+
+node {
+    def mavenHome = tool name: 'maven3.9.9'
+	stage('1.clone') {
+	  echo "cloning latest version of code"
+	  git "https://github.com/africaprocloud/maven-web-app.git"
+	}
+	stage('2.Building') {
+	  echo "building code"
+	  sh "${mavenHome}/bin mvn package"
+	}
+	stage('3.CodeQA') {
+	  echo "running codeQA"
+	  sh "${mavenHome}/bin mvn sonar:sonar"
+	}
+	stage('4.UploadArtifacts') {
+	  echo "uploading Artifacts"
+	  sh "${mavenHome}/bin mvn deploy"
+	}
+	stage('5.Deploy2UAT') {
+	  echo "review code"
+	  adapter
+	}
+	stage('6.ManualAG') {
+	  input message: 'approve code'
+	}
+	stage('7.Deploy2Prod') {
+	  echo "deploy2Prod"
+	  adapter
+	}
+	stage('8.Monitoring') {
+	  echo "monitoring"
+	}
+	stage('9.EmailNotification') {
+	adapter
+	}
+
+
+declarative jenkinspipeline
+===========================
+
+pipeline {
+	agent any
+	tools {}
+	triggers {}
+	options {}
+	stages {
+	  	stage('1.clone') {}
+	    stage('2.Building') {}
+	    stage('3.CodeQA') {}
+	    stage('4.UploadArtifacts') {}
+	    stage('5.Deploy2UAT') {}
+	    stage('6.ManualAG') {}
+	    stage('7.Deploy2Prod') {}
+	    stage('8.Monitoring') {}
+	}
+	post {}
+}
+
+
+
+pipeline {
+	agent any
+	tools {
+	  maven 'maven3.9.9'
+	}
+	triggers {
+	 * * * * *
+	}
+	options {}
+	stages {
+	  	stage('1.clone') {
+	  	  steps {
+	  	    echo "cloningCode"
+	  	    git "https://github.com/africaprocloud/maven-web-app.git"
+	  	  }
+	  	}
+	    stage('2.Building') {
+	      steps {
+	        echo "buildingCode"
+	        sh "mvn package"
+	      }
+	    }
+	    stage('3.CodeQA') {
+	      steps {
+	        echo "runningCodeQA"
+	        sh "mvn sonar:sonar"
+	      }
+	    }
+	    stage('4.UploadArtifacts') {
+	      steps {
+	        echo "uploadingArtifacts"
+	        sh "mvn deploy"
+	      }
+	    }
+	    stage('5.Deploy2UAT') {
+	      steps {
+	        echo "deploy2UAT"
+	        adapter
+	      }
+	    }
+	    stage('6.ManualAG') {
+	      steps {
+	        input message: 'approve code'
+	      }
+	    }
+	    stage('7.Deploy2Prod') {
+	      steps {
+	        echo "deploy2Prod"
+	        adapter
+	      }
+	    }
+	    stage('8.Monitoring') {}
+	}
+	post {}
+}
+
+
+
+
+
+pipeline {
+    agent any
+    tools {
+        maven 'maven3.9.9'
+    }
+
+    stages {
+        stage('1.clone') {
+            steps {
+                echo 'cloning code'
+                git "https://github.com/africaprocloud/maven-web-app.git"
+            }
+        }
+        stage('2.build') {
+            steps {
+                echo 'building code'
+                sh "mvn package"
+            }
+        }
+        stage('3.codeQA') {
+            steps {
+                echo 'running codeQA'
+                sh "mvn sonar:sonar"
+            }
+        }
+        stage('4.uploadArtifacts') {
+            steps {
+                echo 'uploadingArtifacts'
+                sh "mvn deploy"
+            }
+        }
+        stage('5.deploy2UAT') {
+            steps {
+                echo 'review and qualify code'
+                deploy adapters: [tomcat9(credentialsId: 'tomcat-jenkins', path: '', url: 'http://13.250.18.186:8080/')], contextPath: null, war: 'target/*war'
+            }
+        }
+        stage('6.manualApproval') {
+            steps {
+                echo 'approve application to deployment'
+                input message: 'code ready for deployment'
+            }
+        }
+        stage('7.deploy2Prod') {
+            steps {
+                echo 'deploying application to production'
+                deploy adapters: [tomcat9(credentialsId: 'tomcat-jenkins', path: '', url: 'http://13.250.18.186:8080/')], contextPath: null, war: 'target/*war'
+            }
+        }
+        stage('8.monitoring') {
+            steps {
+                echo 'monitoring tools set up'
+            }
+        }
+        stage('9.notification') {
+            steps {
+                emailext body: '''Team,
+     Application is deployed.
+Watch notification in case of latency''', subject: 'notification', to: 'africaprocloudinstitute@gmail.com'
+            }
+        }
+    }
+}
+
